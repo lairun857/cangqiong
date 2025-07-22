@@ -1,0 +1,60 @@
+services:
+  # Redis
+  go-redis:
+    image: redis:7-alpine
+    container_name: go-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  # MySQL
+  go-mysql:
+    image: mysql:8.0
+    container_name: go-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345678
+      MYSQL_DATABASE: sky_take_out 
+      TZ: Asia/Shanghai
+      LANG: en_US.UTF-8
+    ports:
+      - "3307:3306"   # 端口映射：宿主机3307 → 容器3306
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command:
+      - --max_connections=1000
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_general_ci
+      - --default-authentication-plugin=mysql_native_password
+
+  # Go Web 服务
+  gin-server:
+    container_name: gin-server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    depends_on:
+      - go-mysql
+      - go-redis
+    environment:
+      - DB_HOST=go-mysql
+      - DB_PORT=3306
+      - REDIS_HOST=go-redis
+      - REDIS_PORT=6379
+    volumes:
+      - ./config:/app/config:ro
+      - ./logs:/app/logs
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+# 命名卷，避免 Windows 路径问题
+volumes:
+  redis_data:
+  mysql_data:

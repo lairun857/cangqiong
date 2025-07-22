@@ -1,0 +1,7 @@
+*.idea
+*.log
+*.txt
+
+# 数据库文件
+data/mysql/data/
+*.sock

@@ -1,0 +1,41 @@
+server:
+  port: 8080
+  level: debug
+
+datasource:
+  host: localhost          # ← 本地MySQL
+  port: 3306              # ← 本地MySQL端口
+  username: root
+  password: 12345678
+  db_name: sky_take_out
+  config: charset=utf8mb4&parseTime=True&loc=Local
+
+redis:
+  host: localhost          # ← 本地Redis
+  port: 6379              # ← 本地Redis端口
+  password:
+  data_base: 1
+
+log:
+  level: debug
+  filepath: ./logger/systemLog.txt
+
+jwt:
+  admin:
+    secret: admin
+    ttl: 7200000
+    name: token
+  user:
+    secret: user
+    ttl: 7200000
+    name: Authorization
+
+alioss:
+  endpoint: YouOption
+  access_key_id: YouOption
+  access_key_secret: YouOption
+  bucket_name: YouOption
+
+wechat:
+  appid: YouOption
+  secret: YouOption

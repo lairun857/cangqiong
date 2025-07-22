@@ -1,0 +1,6 @@
+# 忽略 data 目录（包含 mysql.sock）
+data/
+
+# 可选：也忽略日志、临时文件
+logs/
+*.tmp
